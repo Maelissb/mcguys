@@ -1,8 +1,4 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { CreateProductDto } from './create-product.dto';
+import { PartialType } from '@nestjs/swagger';
 
-export class UpdateProductInCommandDto {
-    @ApiProperty()
-    ready: boolean;
-    @ApiProperty()
-    packed: boolean;
-}
+export class UpdateProductDto extends PartialType(CreateProductDto) {}

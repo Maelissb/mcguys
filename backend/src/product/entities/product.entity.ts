@@ -1,23 +1,11 @@
-import { ApiProperty } from '@nestjs/swagger';
 import { Product } from '@prisma/client';
 
-export class ProductInCommandEntity implements Product {
-    @ApiProperty()
+export class ProductEntity implements Product {
     id: number;
-
-    @ApiProperty()
     name: string;
-
-    @ApiProperty()
     description: string;
-
-    @ApiProperty()
     price: number;
-
-    @ApiProperty()
     image: string;
-
-    @ApiProperty()
     typeId: number;
 
     constructor(product: Product) {

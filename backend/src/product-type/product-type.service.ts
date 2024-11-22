@@ -1,14 +1,23 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { CreateProductTypeDto } from './dto/create-product-type.dto';
 import { UpdateProductTypeDto } from './dto/update-product-type.dto';
 import { PrismaService } from 'prisma/prisma.service';
+import { ProductTypeEntity } from 'src/product-in-command/entities/product-in-command.entity';
 
 @Injectable()
 export class ProductTypeService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createProductTypeDto: CreateProductTypeDto) {
-    return 'This action adds a new productType';
+    try {
+      const productType = await this.prisma.productType.create({
+        data: createProductTypeDto
+      });
+
+      return new ProductTypeEntity(productType)
+    } catch (error) {
+      throw new BadRequestException('Request body not valid');
+    }
   }
 
   findAll() {
