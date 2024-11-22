@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Command {
+  id               Int                @id @default(autoincrement())
+  date             DateTime           @default(now())
+  total             Float
+  paid             Boolean            @default(false) //au debut une commande n'ai pas payer
+  cancelled        Boolean            @default(false)
+  ready            Boolean            @default(false)
+  delivered        Boolean            @default(false)
+  productInCommand ProductInCommand[]
+
+  @@map("commands") //renommage
+}
+
+model ProductInCommand {
+  id        Int     @id @default(autoincrement())
+  command   Command @relation(fields: [commandId], references: [id])
+  commandId Int     @map("command_id")
+  product   Product @relation(fields: [productId], references: [id])
+  productId Int     @map("product_id")
+  ready     Boolean @default(false)
+  packed    Boolean @default(false)
+
+  @@map("products_in_commands")
+}
+
+model Product {
+  id               Int                @id @default(autoincrement())
+  name             String
+  description      String
+  price            Float
+  image            String
+  Type             ProductType        @relation(fields: [typeId], references: [id])
+  typeId           Int                @map("type_id")
+  productInCommand ProductInCommand[]
+
+  @@map("products")
+}
+
+model ProductType {
+  id       Int       @id @default(autoincrement())
+  name     String
+  products Product[]
+
+  @@map("product_types")
+}
